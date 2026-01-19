@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  height: 100vh;
+  width: 100%;
+  background-color: blue;
+}
+
+.title {
+  color: #fff;
+  font-size: 50px;
+  font-style: italic;
+}
+
+.task-box {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.task-box__input {
+  height: 30px;
+  width: 200px;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  padding-inline: 15px;
+}
+
+.task-box__input:focus {
+  outline: none;
+}
+
+.task-box__btn {
+  height: 32px;
+  border: none;
+  border-radius: 10px;
+  padding-inline: 15px;
+}
+
+.task-box__btn:hover {
+  cursor: pointer;
+  background-color: rgb(159, 162, 165);
+  color: #fff;
+  scale: 0.99;
+}
+
+.todos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+}
+
+.todoblock {
+  position: relative;
+}
+
+.todos__item {
+  display: block;
+  box-sizing: border-box;
+  background-color: #fff;
+  width: 250px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 20px;
+  border-radius: 10px;
+  padding-inline: 15px;
+}
+
+.del {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  background-image: url(../images/bin-icon.png);
+  background-size: 25px 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 25px;
+  height: 25px;
+  background-color: rgba(255, 64, 64, 0.7);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.del:hover {
+  scale: 0.9;
+}

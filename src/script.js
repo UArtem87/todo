@@ -8,7 +8,11 @@ let toDoList = [];
 
 function getStorageList() {
   toDoList = JSON.parse(localStorage.getItem('list'));
-  renderToDo();
+  if (toDoList) {
+    renderToDo();
+  } else {
+    toDoList = [];
+  }
 }
 
 getStorageList();
@@ -16,7 +20,8 @@ getStorageList();
 function getToDo() {
   if (data.value === '') {
     data.focus();
-  } else {
+  }
+  if (toDoList) {
     toDoList.push(data.value.trim());
     renderToDo();
   }

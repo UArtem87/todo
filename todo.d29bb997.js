@@ -207,15 +207,15 @@
       });
     }
   }
-})({"9JJ5D":[function(require,module,exports,__globalThis) {
+})({"7SvX3":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
-var HMR_ENV_HASH = "d6ea1d42532a7575";
+var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "7055c94b59712999";
+module.bundle.HMR_BUNDLE_ID = "ae5be248d29bb997";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_SERVER_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -713,8 +713,62 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     }
 }
 
-},{}],"4M6V8":[function(require,module,exports,__globalThis) {
+},{}],"kyksZ":[function(require,module,exports,__globalThis) {
+const data = document.querySelector('.task-box__input');
+const save = document.querySelector('.task-box__btn');
+const todos = document.querySelector('.todos');
+data.focus();
+let toDoList = [];
+function getStorageList() {
+    toDoList = JSON.parse(localStorage.getItem('list'));
+    if (toDoList) renderToDo();
+    else toDoList = [];
+}
+getStorageList();
+function getToDo() {
+    if (data.value === '') data.focus();
+    if (toDoList) {
+        toDoList.push(data.value.trim());
+        renderToDo();
+    }
+}
+function renderToDo() {
+    todos.innerHTML = '';
+    toDoList.forEach((todo, i)=>{
+        const task = `${todo.slice(0, 1).toUpperCase()}${todo.slice(1)}`;
+        const toDoBlock = document.createElement('div');
+        toDoBlock.classList.add('todoblock');
+        const toDoItem = document.createElement('span');
+        toDoItem.classList.add('todos__item');
+        const del = document.createElement('span');
+        del.classList.add('del');
+        toDoBlock.append(toDoItem);
+        toDoBlock.append(del);
+        toDoBlock.setAttribute('id', i);
+        toDoItem.textContent = `${i + 1}. ${task}`;
+        todos.append(toDoBlock);
+        const storageList = JSON.stringify(toDoList);
+        localStorage.setItem('list', storageList);
+    });
+    data.value = '';
+    data.focus();
+}
+function deleteTask(taskId) {
+    const id = +taskId;
+    toDoList.splice(id, 1);
+    renderToDo();
+}
+data.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter') getToDo();
+});
+save.addEventListener('click', getToDo);
+todos.addEventListener('click', (e)=>{
+    if (e.target.classList.contains('del')) {
+        const id = e.target.closest('.todoblock').getAttribute('id');
+        deleteTask(id);
+    }
+});
 
-},{}]},["9JJ5D","4M6V8"], "4M6V8", "parcelRequire5af9", {})
+},{}]},["7SvX3","kyksZ"], "kyksZ", "parcelRequire5af9", {})
 
-//# sourceMappingURL=todo.59712999.js.map
+//# sourceMappingURL=todo.d29bb997.js.map

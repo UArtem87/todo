@@ -3,6 +3,7 @@ body {
 }
 
 .wrapper {
+  box-sizing: border-box;
   background-color: #00f;
   flex-direction: column;
   align-items: center;
@@ -19,6 +20,7 @@ body {
 }
 
 .task-box {
+  flex-wrap: wrap;
   gap: 30px;
   margin-top: 20px;
   display: flex;
@@ -54,7 +56,6 @@ body {
 .todos {
   flex-direction: column;
   gap: 20px;
-  height: 100vh;
   display: flex;
 }
 
@@ -103,8 +104,17 @@ body {
     text-align: center;
   }
 
+  .task-box {
+    justify-content: center;
+  }
+
   .task-box__input {
-    width: 150px;
+    width: 80%;
+    max-width: 250px;
+  }
+
+  .task-box__btn {
+    width: 80%;
   }
 }
 /*# sourceMappingURL=todo.4d663569.css.map */

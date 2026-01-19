@@ -12,22 +12,10 @@ body {
   display: flex;
 }
 
-@media (width <= 366px) {
-  .wrapper {
-    padding-inline: 5px;
-  }
-}
-
 .title {
   color: #fff;
   font-size: 50px;
   font-style: italic;
-}
-
-@media (width >= 366px) {
-  .title {
-    text-align: center;
-  }
 }
 
 .task-box {
@@ -104,5 +92,19 @@ body {
 
 .del:hover {
   scale: .9;
+}
+
+@media (width <= 366px) {
+  .wrapper {
+    padding-inline: 5px;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .task-box__input {
+    width: 150px;
+  }
 }
 /*# sourceMappingURL=todo.4d663569.css.map */

@@ -6,32 +6,44 @@ data.focus();
 
 let toDoList = [];
 
-function getStorageList() {
-  toDoList = JSON.parse(localStorage.getItem('list'));
-  if (toDoList) {
+async function getList() {
+  const response = await fetch('https://696f53afa06046ce618642cd.mockapi.io/tasks');
+  const dataList = await response.json();
+  if (dataList) {
+    toDoList = dataList;
+    console.log(toDoList)
     renderToDo();
   } else {
     toDoList = [];
   }
 }
 
-getStorageList();
+getList();
 
-function getToDo() {
+async function getToDo() {
   if (data.value === '') {
     data.focus();
+  } else {
+    const task = data.value;
+
+    await fetch('https://696f53afa06046ce618642cd.mockapi.io/tasks', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: task })
+    });
+
+    getList();
   }
-  if (toDoList) {
-    toDoList.push(data.value.trim());
-    renderToDo();
-  }
-};
+}
+
+
 
 function renderToDo() {
   todos.innerHTML = '';
   toDoList.forEach((todo, i) => {
-    const task = `${todo.slice(0, 1).toUpperCase()}${todo.slice(1)}`;
+    const task = `${todo.text.slice(0, 1).toUpperCase()}${todo.text.slice(1)}`;
     const toDoBlock = document.createElement('div');
+    toDoBlock.setAttribute('id', todo.id)
     toDoBlock.classList.add('todoblock')
     const toDoItem = document.createElement('span')
     toDoItem.classList.add('todos__item');
@@ -39,20 +51,19 @@ function renderToDo() {
     del.classList.add('del');
     toDoBlock.append(toDoItem);
     toDoBlock.append(del);
-    toDoBlock.setAttribute('id', i)
     toDoItem.textContent = `${i + 1}. ${task}`;
     todos.append(toDoBlock);
-    const storageList = JSON.stringify(toDoList);
-    localStorage.setItem('list', storageList);
   });
   data.value = '';
   data.focus();
 };
 
-function deleteTask(taskId) {
-  const id = +taskId;
-  toDoList.splice(id, 1);
-  renderToDo();
+async function deleteTask(taskId) {
+  await fetch(`https://696f53afa06046ce618642cd.mockapi.io/tasks/${taskId}`, {
+    method: 'DELETE'
+  });
+
+  getList();
 }
 
 data.addEventListener('keydown', (e) => {
@@ -60,7 +71,9 @@ data.addEventListener('keydown', (e) => {
     getToDo();
   }
 });
-save.addEventListener('click', getToDo)
+
+save.addEventListener('click', getToDo);
+
 todos.addEventListener('click', (e) => {
   if (e.target.classList.contains('del')) {
     const id = e.target.closest('.todoblock').getAttribute('id');

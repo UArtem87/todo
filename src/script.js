@@ -7,11 +7,15 @@ data.focus();
 let toDoList = [];
 
 async function getList() {
+  loader.classList.remove('hidden');
+
   const response = await fetch('https://696f53afa06046ce618642cd.mockapi.io/tasks');
   const dataList = await response.json();
+  console.log(dataList)
   if (dataList) {
     toDoList = dataList;
-    console.log(toDoList)
+    loader.classList.add('hidden');
+
     renderToDo();
   } else {
     toDoList = [];
@@ -20,7 +24,7 @@ async function getList() {
 
 getList();
 
-async function getToDo() {
+async function setToDo() {
   if (data.value === '') {
     data.focus();
   } else {
@@ -68,11 +72,11 @@ async function deleteTask(taskId) {
 
 data.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    getToDo();
+    setToDo();
   }
 });
 
-save.addEventListener('click', getToDo);
+save.addEventListener('click', setToDo);
 
 todos.addEventListener('click', (e) => {
   if (e.target.classList.contains('del')) {

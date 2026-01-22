@@ -1,6 +1,11 @@
 const data = document.querySelector('.task-box__input');
 const save = document.querySelector('.task-box__btn');
 const todos = document.querySelector('.todos');
+const header = document.querySelector('.header');
+const loader = document.querySelector('.loader');
+
+const tasksAdress = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
+const purchasesAdress = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
 
 data.focus();
 
@@ -15,15 +20,12 @@ async function getList() {
   if (dataList) {
     toDoList = dataList;
     loader.classList.add('hidden');
-    console.log(toDoList)
 
     renderToDo();
   } else {
     toDoList = [];
   }
 }
-
-getList();
 
 async function setToDo() {
   if (data.value === '') {
@@ -41,8 +43,6 @@ async function setToDo() {
   }
 }
 
-
-
 function renderToDo() {
   todos.innerHTML = '';
   toDoList.forEach((todo, i) => {
@@ -58,33 +58,36 @@ function renderToDo() {
 
     const important = document.createElement('span');
     important.classList.add('important');
+    important.innerHTML = todo.important ? '★' : '☆';
 
     if (todo.important) {
       important.classList.add('active');
     }
 
-    const status = important.classList.contains('active');
-    important.innerHTML = status ? '★' : '☆';
 
     const del = document.createElement('span');
     del.classList.add('del');
 
-    toDoBlock.append(toDoItem);
-    toDoBlock.append(important);
-    toDoBlock.append(del);
-
+    toDoBlock.append(toDoItem, important, del);
     todos.append(toDoBlock);
   });
+
+  save.onclick = () => setToDo();
+  data.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      setToDo();
+    }
+  };
 
   data.value = '';
   data.focus();
 };
 
+
 async function deleteTask(taskId) {
   await fetch(`https://696f53afa06046ce618642cd.mockapi.io/tasks/${taskId}`, {
     method: 'DELETE'
   });
-
   getList();
 }
 
@@ -93,35 +96,46 @@ async function madeImportant(taskId, status) {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ important: status })
-  })
+  });
 }
-
-data.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    setToDo();
-  }
-});
-
-save.addEventListener('click', setToDo);
 
 todos.addEventListener('click', (e) => {
   const el = e.target;
-  const id = el.closest('.todoblock').getAttribute('id');
+  const parent = el.closest('.todoblock');
+  const id = parent.getAttribute('id');
 
   if (el.classList.contains('del')) {
     deleteTask(id);
   }
 
-  if (el.classList.contains('todos__item')) {
-    el.classList.toggle('expanded')
-  }
-
   if (el.classList.contains('important')) {
     el.classList.toggle('active');
-
     const status = el.classList.contains('active');
     el.innerHTML = status ? '★' : '☆';
-
     madeImportant(id, status);
+  }
+
+  if (el.classList.contains('todos__item')) {
+    el.classList.toggle('expanded');
+  }
+});
+
+header.addEventListener('click', (e) => {
+  const mainTitle = document.querySelector('.main-title');
+  const purchases = document.querySelector('.container-purchases');
+  const tasks = document.querySelector('.container-tasks');
+
+  if (e.target.classList.contains('task')) {
+    mainTitle.classList.add('hidden');
+    tasks.classList.remove('hidden');
+    purchases.classList.add('hidden');
+    getList();
+  }
+
+  if (e.target.classList.contains('purchases')) {
+    mainTitle.classList.add('hidden');
+    tasks.classList.add('hidden');
+    purchases.classList.remove('hidden');
+    getList();
   }
 });

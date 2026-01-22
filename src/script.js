@@ -45,6 +45,10 @@ async function setToDo() {
 function renderToDo() {
   todos.innerHTML = '';
   toDoList.forEach((todo, i) => {
+    if (todo.text.length > 15) {
+      todo.text = `${todo.text.slice(0, 14)}...`;
+    }
+
     const task = `${todo.text.slice(0, 1).toUpperCase()}${todo.text.slice(1)}`;
     const toDoBlock = document.createElement('div');
     toDoBlock.setAttribute('id', todo.id)

@@ -7,7 +7,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 20px;
   min-height: 100vh;
   width: 100%;
   background-color: blue;
@@ -17,6 +17,8 @@ body {
   color: #fff;
   font-size: 50px;
   font-style: italic;
+  margin: 0;
+  margin-top: 20px;
 }
 
 .hidden {
@@ -24,11 +26,15 @@ body {
   transition: opacity 0.3s ease;
 }
 
+.loader {
+  height: 10px;
+  margin: 0;
+}
+
 .task-box {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
-  /* margin-top: 20px; */
+  gap: 20px;
 }
 
 .task-box__input {
@@ -62,6 +68,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 50px;
 }
 
 .todoblock {

@@ -39,6 +39,7 @@ body {
 }
 
 .task-box__input {
+  box-sizing: border-box;
   height: 30px;
   width: 200px;
   border: none;
@@ -85,19 +86,18 @@ body {
   overflow: hidden;
   box-sizing: border-box;
   background-color: #fff;
-  width: 250px;
+  width: 300px;
   line-height: 32px;
   font-size: 20px;
   border-radius: 10px;
   padding-left: 15px;
-  padding-right: 40px;
+  padding-right: 75px;
   cursor: default;
 }
 
 .todos__item.expanded {
   max-height: 500px;
   white-space: normal;
-  cursor: zoom-out;
 }
 
 .del {
@@ -120,6 +120,19 @@ body {
   scale: 0.9;
 }
 
+.important {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-55%);
+  right: 45px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.important.active {
+  color: #ffcc00;
+}
+
 @media (max-width: 366px) {
   .title {
     text-align: center;
@@ -129,11 +142,25 @@ body {
     justify-content: center;
   }
 
-  .task-box__input {
+  .task-box__input,
+  .task-box__btn {
     width: 80%;
   }
 
-  .task-box__btn {
-    width: 80%;
+  .todos {
+    width: 90%;
+  }
+
+  .todoblock {
+    width: 100%;
+  }
+
+  .todos__item {
+    width: 100%;
+  }
+
+  .del {
+    top: 3px;
+    right: 10px;
   }
 }

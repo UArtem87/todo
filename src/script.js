@@ -11,10 +11,11 @@ async function getList() {
 
   const response = await fetch('https://696f53afa06046ce618642cd.mockapi.io/tasks');
   const dataList = await response.json();
-  console.log(dataList)
+
   if (dataList) {
     toDoList = dataList;
     loader.classList.add('hidden');
+    console.log(toDoList)
 
     renderToDo();
   } else {
@@ -46,18 +47,35 @@ function renderToDo() {
   todos.innerHTML = '';
   toDoList.forEach((todo, i) => {
     const task = `${todo.text.slice(0, 1).toUpperCase()}${todo.text.slice(1)}`;
+
     const toDoBlock = document.createElement('div');
-    toDoBlock.setAttribute('id', todo.id)
-    toDoBlock.classList.add('todoblock')
-    const toDoItem = document.createElement('span')
+    toDoBlock.setAttribute('id', todo.id);
+    toDoBlock.classList.add('todoblock');
+
+    const toDoItem = document.createElement('span');
     toDoItem.classList.add('todos__item');
+    toDoItem.textContent = `${i + 1}. ${task}`;
+
+    const important = document.createElement('span');
+    important.classList.add('important');
+
+    if (todo.important) {
+      important.classList.add('active');
+    }
+
+    const status = important.classList.contains('active');
+    important.innerHTML = status ? '★' : '☆';
+
     const del = document.createElement('span');
     del.classList.add('del');
+
     toDoBlock.append(toDoItem);
+    toDoBlock.append(important);
     toDoBlock.append(del);
-    toDoItem.textContent = `${i + 1}. ${task}`;
+
     todos.append(toDoBlock);
   });
+
   data.value = '';
   data.focus();
 };
@@ -70,6 +88,14 @@ async function deleteTask(taskId) {
   getList();
 }
 
+async function madeImportant(taskId, status) {
+  await fetch(`https://696f53afa06046ce618642cd.mockapi.io/tasks/${taskId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ important: status })
+  })
+}
+
 data.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     setToDo();
@@ -79,13 +105,23 @@ data.addEventListener('keydown', (e) => {
 save.addEventListener('click', setToDo);
 
 todos.addEventListener('click', (e) => {
-  console.log(e.target)
-  if (e.target.classList.contains('del')) {
-    const id = e.target.closest('.todoblock').getAttribute('id');
+  const el = e.target;
+  const id = el.closest('.todoblock').getAttribute('id');
+
+  if (el.classList.contains('del')) {
     deleteTask(id);
   }
 
-  if (e.target.classList.contains('todos__item')) {
-    e.target.classList.toggle('expanded')
+  if (el.classList.contains('todos__item')) {
+    el.classList.toggle('expanded')
+  }
+
+  if (el.classList.contains('important')) {
+    el.classList.toggle('active');
+
+    const status = el.classList.contains('active');
+    el.innerHTML = status ? '★' : '☆';
+
+    madeImportant(id, status);
   }
 });

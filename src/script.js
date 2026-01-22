@@ -79,8 +79,13 @@ data.addEventListener('keydown', (e) => {
 save.addEventListener('click', setToDo);
 
 todos.addEventListener('click', (e) => {
+  console.log(e.target)
   if (e.target.classList.contains('del')) {
     const id = e.target.closest('.todoblock').getAttribute('id');
     deleteTask(id);
+  }
+
+  if (e.target.classList.contains('todos__item')) {
+    e.target.classList.toggle('expanded')
   }
 });

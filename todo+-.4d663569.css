@@ -75,21 +75,26 @@ body {
 }
 
 .todos__item {
+  white-space: nowrap;
+  text-overflow: ellipsis;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: default;
   background-color: #fff;
   border-radius: 10px;
   width: 250px;
   max-height: 32px;
-  padding-inline: 15px;
+  padding-left: 15px;
+  padding-right: 40px;
   font-size: 20px;
   line-height: 32px;
-  transition: max-height 1s ease-in-out;
+  transition: all 1s ease-in-out;
   display: block;
   overflow: hidden;
 }
 
 .todos__item.expanded {
+  white-space: normal;
+  cursor: zoom-out;
   max-height: 500px;
 }
 

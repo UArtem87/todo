@@ -78,8 +78,10 @@ body {
 
 .todos__item {
   display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   max-height: 32px;
-  transition: max-height 1s ease-in-out;
+  transition: 1s ease-in-out;
   overflow: hidden;
   box-sizing: border-box;
   background-color: #fff;
@@ -87,12 +89,15 @@ body {
   line-height: 32px;
   font-size: 20px;
   border-radius: 10px;
-  padding-inline: 15px;
-  cursor: pointer;
+  padding-left: 15px;
+  padding-right: 40px;
+  cursor: default;
 }
 
 .todos__item.expanded {
   max-height: 500px;
+  white-space: normal;
+  cursor: zoom-out;
 }
 
 .del {

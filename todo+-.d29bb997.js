@@ -723,10 +723,10 @@ async function getList() {
     loader.classList.remove('hidden');
     const response = await fetch('https://696f53afa06046ce618642cd.mockapi.io/tasks');
     const dataList = await response.json();
-    console.log(dataList);
     if (dataList) {
         toDoList = dataList;
         loader.classList.add('hidden');
+        console.log(toDoList);
         renderToDo();
     } else toDoList = [];
 }
@@ -756,11 +756,17 @@ function renderToDo() {
         toDoBlock.classList.add('todoblock');
         const toDoItem = document.createElement('span');
         toDoItem.classList.add('todos__item');
+        toDoItem.textContent = `${i + 1}. ${task}`;
+        const important = document.createElement('span');
+        important.classList.add('important');
+        if (todo.important) important.classList.add('active');
+        const status = important.classList.contains('active');
+        important.innerHTML = status ? "\u2605" : "\u2606";
         const del = document.createElement('span');
         del.classList.add('del');
         toDoBlock.append(toDoItem);
+        toDoBlock.append(important);
         toDoBlock.append(del);
-        toDoItem.textContent = `${i + 1}. ${task}`;
         todos.append(toDoBlock);
     });
     data.value = '';
@@ -772,17 +778,32 @@ async function deleteTask(taskId) {
     });
     getList();
 }
+async function madeImportant(taskId, status) {
+    await fetch(`https://696f53afa06046ce618642cd.mockapi.io/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            important: status
+        })
+    });
+}
 data.addEventListener('keydown', (e)=>{
     if (e.key === 'Enter') setToDo();
 });
 save.addEventListener('click', setToDo);
 todos.addEventListener('click', (e)=>{
-    console.log(e.target);
-    if (e.target.classList.contains('del')) {
-        const id = e.target.closest('.todoblock').getAttribute('id');
-        deleteTask(id);
+    const el = e.target;
+    const id = el.closest('.todoblock').getAttribute('id');
+    if (el.classList.contains('del')) deleteTask(id);
+    if (el.classList.contains('todos__item')) el.classList.toggle('expanded');
+    if (el.classList.contains('important')) {
+        el.classList.toggle('active');
+        const status = el.classList.contains('active');
+        el.innerHTML = status ? "\u2605" : "\u2606";
+        madeImportant(id, status);
     }
-    if (e.target.classList.contains('todos__item')) e.target.classList.toggle('expanded');
 });
 
 },{}]},["7SvX3","kyksZ"], "kyksZ", "parcelRequire5af9", {})

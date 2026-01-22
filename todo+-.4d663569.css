@@ -37,6 +37,7 @@ body {
 }
 
 .task-box__input {
+  box-sizing: border-box;
   border: none;
   border-radius: 10px;
   width: 200px;
@@ -81,10 +82,10 @@ body {
   cursor: default;
   background-color: #fff;
   border-radius: 10px;
-  width: 250px;
+  width: 300px;
   max-height: 32px;
   padding-left: 15px;
-  padding-right: 40px;
+  padding-right: 75px;
   font-size: 20px;
   line-height: 32px;
   transition: all 1s ease-in-out;
@@ -94,7 +95,6 @@ body {
 
 .todos__item.expanded {
   white-space: normal;
-  cursor: zoom-out;
   max-height: 500px;
 }
 
@@ -118,6 +118,19 @@ body {
   scale: .9;
 }
 
+.important {
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  right: 45px;
+  transform: translateY(-55%);
+}
+
+.important.active {
+  color: #fc0;
+}
+
 @media (width <= 366px) {
   .title {
     text-align: center;
@@ -129,6 +142,19 @@ body {
 
   .task-box__input, .task-box__btn {
     width: 80%;
+  }
+
+  .todos {
+    width: 90%;
+  }
+
+  .todoblock, .todos__item {
+    width: 100%;
+  }
+
+  .del {
+    top: 3px;
+    right: 10px;
   }
 }
 /*# sourceMappingURL=todo+-.4d663569.css.map */

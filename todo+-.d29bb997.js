@@ -815,6 +815,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
         const isTasks = e.target.classList.contains('tasks');
         const isPurchases = e.target.classList.contains('purchases');
         if (!isTasks && !isPurchases) return;
+        document.querySelectorAll('.view').forEach((tab)=>{
+            tab.classList.remove('active');
+        });
+        e.target.classList.add('active');
         const mainTitle = document.querySelector('.main-title');
         mainTitle.classList.add('hidden');
         container.classList.remove('hidden');

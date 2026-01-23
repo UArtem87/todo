@@ -15,7 +15,7 @@ body {
   display: flex;
 }
 
-.task, .purchases {
+.view {
   color: #fff;
   cursor: pointer;
   padding: 20px 10px;
@@ -41,19 +41,18 @@ body {
   transform: translate(-50%, -70%);
 }
 
-.container-tasks {
-  box-sizing: border-box;
-  background-color: #00f;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  min-height: calc(100vh - 80px);
-  transition: opacity .8s;
-  display: flex;
+.loader {
+  height: 15px;
+  margin: 0 0 20px;
+  display: block;
 }
 
-.container-purchases {
-  box-sizing: border-box;
+.not-view {
+  opacity: 0;
+  transition: all .8s;
+}
+
+.container {
   background-color: #00f;
   flex-direction: column;
   align-items: center;
@@ -61,15 +60,11 @@ body {
   min-height: calc(100vh - 80px);
   transition: opacity .8s;
   display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow-y: auto;
 }
 
 .title {
   color: #fff;
-  margin: 20px 0 0;
+  margin: 0;
   font-size: 50px;
   font-style: italic;
 }
@@ -77,23 +72,19 @@ body {
 .hidden {
   opacity: 0;
   pointer-events: none;
-  transition: opacity .5s;
+  visibility: hidden;
+  transition: all .8s;
+  position: absolute;
 }
 
-.loader {
-  height: 10px;
-  margin: 0 0 15px;
-}
-
-.task-box {
+.data {
   flex-wrap: wrap;
   gap: 30px;
   margin-bottom: 40px;
   display: flex;
 }
 
-.task-box__input {
-  box-sizing: border-box;
+.data__input {
   border: none;
   border-radius: 10px;
   width: 200px;
@@ -102,36 +93,41 @@ body {
   font-size: 20px;
 }
 
-.task-box__input:focus {
+.data__input:focus {
   outline: none;
 }
 
-.task-box__btn {
+.data__btn {
   border: none;
   border-radius: 10px;
   height: 32px;
   padding-inline: 15px;
 }
 
-.task-box__btn:hover {
+.data__btn:hover {
   cursor: pointer;
   color: #fff;
   background-color: #9fa2a5;
   scale: .99;
 }
 
-.todos {
+.items {
   flex-direction: column;
   gap: 20px;
   padding-bottom: 40px;
+  transition: opacity .4s;
   display: flex;
 }
 
-.todoblock {
+.items.faded {
+  opacity: 0;
+}
+
+.items__block {
   position: relative;
 }
 
-.todos__item {
+.items__block--title {
   white-space: nowrap;
   text-overflow: ellipsis;
   box-sizing: border-box;
@@ -149,9 +145,22 @@ body {
   overflow: hidden;
 }
 
-.todos__item.expanded {
+.items__block--title.expanded {
   white-space: normal;
   max-height: 500px;
+}
+
+.important {
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  right: 45px;
+  transform: translateY(-55%);
+}
+
+.important.active {
+  color: #fc0;
 }
 
 .del {
@@ -174,19 +183,6 @@ body {
   scale: .9;
 }
 
-.important {
-  cursor: pointer;
-  font-size: 30px;
-  position: absolute;
-  top: 50%;
-  right: 45px;
-  transform: translateY(-55%);
-}
-
-.important.active {
-  color: #fc0;
-}
-
 @media (width <= 366px) {
   .main-title {
     white-space: wrap;
@@ -196,19 +192,19 @@ body {
     text-align: center;
   }
 
-  .task-box {
+  .data {
     justify-content: center;
   }
 
-  .task-box__input, .task-box__btn {
+  .data__input, .data__btn {
     width: 80%;
   }
 
-  .todos {
+  .items {
     width: 90%;
   }
 
-  .todoblock, .todos__item {
+  .items__block, .items__block--title {
     width: 100%;
   }
 

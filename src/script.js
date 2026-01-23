@@ -1,7 +1,7 @@
-const tasksAdress = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
-const purchasesAdress = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
+const TASKSADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
+const PURCHASESADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
 
-let currentAdress = purchasesAdress;
+let currentAdress = PURCHASESADRESS;
 
 window.addEventListener('DOMContentLoaded', () => {
 
@@ -89,7 +89,6 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     data.value = '';
-    data.focus();
   };
 
   document.addEventListener('click', (e) => {
@@ -137,7 +136,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const tasks = document.querySelector('.container-tasks');
 
     if (e.target.classList.contains('task')) {
-      currentAdress = tasksAdress;
+      currentAdress = TASKSADRESS;
       mainTitle.classList.add('hidden');
       tasks.classList.remove('hidden');
       purchases.classList.add('hidden');
@@ -145,7 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if (e.target.classList.contains('purchases')) {
-      currentAdress = purchasesAdress;
+      currentAdress = PURCHASESADRESS;
       mainTitle.classList.add('hidden');
       tasks.classList.add('hidden');
       purchases.classList.remove('hidden');

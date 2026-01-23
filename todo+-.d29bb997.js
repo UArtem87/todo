@@ -714,9 +714,9 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"kyksZ":[function(require,module,exports,__globalThis) {
-const tasksAdress = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
-const purchasesAdress = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
-let currentAdress = purchasesAdress;
+const TASKSADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
+const PURCHASESADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
+let currentAdress = PURCHASESADRESS;
 window.addEventListener('DOMContentLoaded', ()=>{
     const header = document.querySelector('.header');
     let data;
@@ -779,7 +779,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
             if (e.key === 'Enter') setToDo(currentAdress);
         };
         data.value = '';
-        data.focus();
     }
     document.addEventListener('click', (e)=>{
         const el = e.target;
@@ -817,14 +816,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
         const purchases = document.querySelector('.container-purchases');
         const tasks = document.querySelector('.container-tasks');
         if (e.target.classList.contains('task')) {
-            currentAdress = tasksAdress;
+            currentAdress = TASKSADRESS;
             mainTitle.classList.add('hidden');
             tasks.classList.remove('hidden');
             purchases.classList.add('hidden');
             getList(currentAdress);
         }
         if (e.target.classList.contains('purchases')) {
-            currentAdress = purchasesAdress;
+            currentAdress = PURCHASESADRESS;
             mainTitle.classList.add('hidden');
             tasks.classList.add('hidden');
             purchases.classList.remove('hidden');

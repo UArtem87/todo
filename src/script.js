@@ -90,29 +90,31 @@ window.addEventListener('DOMContentLoaded', () => {
 
     data.value = '';
     data.focus();
-
-    todos.addEventListener('click', (e) => {
-      const el = e.target;
-      const parent = el.closest('.todoblock');
-      const id = parent.getAttribute('id');
-
-      if (el.classList.contains('del')) {
-        deleteTask(currentAdress, id);
-      }
-
-      if (el.classList.contains('important')) {
-        el.classList.toggle('active');
-        const status = el.classList.contains('active');
-        el.innerHTML = status ? '★' : '☆';
-        madeImportant(currentAdress, id, status);
-      }
-
-      if (el.classList.contains('todos__item')) {
-        el.classList.toggle('expanded');
-      }
-    });
   };
 
+  document.addEventListener('click', (e) => {
+    const el = e.target;
+    const parent = el.closest('.todoblock');
+
+    if (!parent) return;
+
+    const id = parent.getAttribute('id');
+
+    if (el.classList.contains('del')) {
+      deleteTask(currentAdress, id);
+    }
+
+    if (el.classList.contains('important')) {
+      el.classList.toggle('active');
+      const status = el.classList.contains('active');
+      el.innerHTML = status ? '★' : '☆';
+      madeImportant(currentAdress, id, status);
+    }
+
+    if (el.classList.contains('todos__item')) {
+      el.classList.toggle('expanded');
+    }
+  });
 
   async function deleteTask(adress, taskId) {
     await fetch(`${adress}/${taskId}`, {

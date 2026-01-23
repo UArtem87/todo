@@ -1,6 +1,6 @@
 {
   "name": "todo",
-  "version": "2.0.1",
+  "version": "3.0.1",
   "homepage": "https://UArtem87.github.io/todo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

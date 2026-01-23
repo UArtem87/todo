@@ -1,5 +1,10 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  background-color: blue;
 }
 
 .header {
@@ -13,19 +18,20 @@ body {
 .task {
   color: #fff;
   font-size: 22px;
-  padding-inline: 10px;
+  padding: 20px 10px;
   cursor: pointer;
 }
 
 .purchases {
   color: #fff;
   font-size: 22px;
+  padding: 20px 10px;
   cursor: pointer;
 }
 
 .wrapper {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   background-color: blue;
 }
 
@@ -33,7 +39,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -70%);
   white-space: nowrap;
   margin: 0;
   text-align: center;
@@ -44,12 +50,12 @@ body {
 }
 
 .container-tasks {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s ease;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   width: 100%;
   background-color: blue;
 }
@@ -58,14 +64,15 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s ease;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   width: 100%;
   background-color: blue;
+  overflow-y: auto;
 }
 
 .title {

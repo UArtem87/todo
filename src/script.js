@@ -28,12 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
       itemsList = dataList;
       loader.classList.add('not-view');
 
-      itemsList.forEach(item => {
-        if (item.important) {
-          itemsList.unshift(item);
-        }
-      })
-
       renderItems();
     } else {
       itemsList = [];

@@ -733,11 +733,11 @@ window.addEventListener('DOMContentLoaded', ()=>{
         const response = await fetch(adress);
         const dataList = await response.json();
         if (dataList) {
-            itemsList = dataList;
-            loader.classList.add('not-view');
-            itemsList.forEach((item)=>{
-                if (item.important) itemsList.unshift(item);
+            itemsList = [];
+            dataList.forEach((item)=>{
+                item.important ? itemsList.unshift(item) : itemsList.push(item);
             });
+            loader.classList.add('not-view');
             renderItems();
         } else itemsList = [];
     }
@@ -795,6 +795,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
                 important: status
             })
         });
+        getList(adress);
     }
     document.addEventListener('click', (e)=>{
         const el = e.target;

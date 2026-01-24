@@ -802,7 +802,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
         const parent = el.closest('.items__block');
         if (!parent) return;
         const id = parent.getAttribute('id');
-        if (el.classList.contains('del')) deleteItem(currentAdress, id);
+        if (el.classList.contains('del')) {
+            parent.classList.add('delete');
+            deleteItem(currentAdress, id);
+        }
         if (el.classList.contains('important')) {
             el.classList.toggle('active');
             const status = el.classList.contains('active');

@@ -168,6 +168,11 @@ body {
   overflow: hidden;
 }
 
+.delete {
+  transition: transform .5s;
+  transform: scaleX(0);
+}
+
 .items__block--title.expanded {
   white-space: normal;
   max-height: 500px;

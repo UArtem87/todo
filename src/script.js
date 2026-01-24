@@ -25,7 +25,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const dataList = await response.json();
 
     if (dataList) {
-      itemsList = dataList;
+      itemsList = [];
+      dataList.forEach(item => {
+        item.important ? itemsList.unshift(item) : itemsList.push(item);
+      })
       loader.classList.add('not-view');
 
       renderItems();
@@ -97,6 +100,8 @@ window.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ important: status })
     });
+
+    getList(adress);
   };
 
   document.addEventListener('click', (e) => {

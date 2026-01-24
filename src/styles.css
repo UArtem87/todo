@@ -187,6 +187,7 @@ body {
   right: 45px;
   font-size: 30px;
   cursor: pointer;
+  user-select: none;
 }
 
 .important.active {

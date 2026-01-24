@@ -187,15 +187,34 @@ body {
 }
 
 .change {
+  display: block;
   padding-inline: 5px;
-  transform: rotate(135deg);
+  transform: rotate(45deg);
   font-size: 20px;
   user-select: none;
   color: #1900ff;
 }
 
 .change:hover {
-  transform: rotate(90deg);
+  animation: wiggle 0.5s ease infinite;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(90deg);
+  }
+  25% {
+    transform: rotate(100deg);
+  }
+  50% {
+    transform: rotate(80deg);
+  }
+  75% {
+    transform: rotate(100deg);
+  }
+  100% {
+    transform: rotate(90deg);
+  }
 }
 
 .important {

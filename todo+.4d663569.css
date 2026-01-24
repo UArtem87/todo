@@ -184,11 +184,34 @@ body {
   color: #1900ff;
   padding-inline: 5px;
   font-size: 20px;
-  transform: rotate(135deg);
+  display: block;
+  transform: rotate(45deg);
 }
 
 .change:hover {
-  transform: rotate(90deg);
+  animation: .5s infinite wiggle;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(90deg);
+  }
+
+  25% {
+    transform: rotate(100deg);
+  }
+
+  50% {
+    transform: rotate(80deg);
+  }
+
+  75% {
+    transform: rotate(100deg);
+  }
+
+  100% {
+    transform: rotate(90deg);
+  }
 }
 
 .important {

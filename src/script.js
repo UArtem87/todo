@@ -1,5 +1,5 @@
-const TASKSADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
-const PURCHASESADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
+const TASKSADRESS = 'YOUR_MOCK_API_ENDPOINT_HERE';
+const PURCHASESADRESS = 'YOUR_MOCK_API_ENDPOINT_HERE';
 
 window.addEventListener('DOMContentLoaded', () => {
   let itemsList = [];
@@ -15,26 +15,33 @@ window.addEventListener('DOMContentLoaded', () => {
   const items = document.querySelector('.items');
 
   async function getList(adress) {
-    if (adress === TASKSADRESS) {
-      title.textContent = 'Надо сделать:'
-    } else {
-      title.textContent = 'Надо купить:'
-    }
+    title.textContent = adress === TASKSADRESS
+      ? 'Надо сделать:'
+      : 'Надо купить:';
+
     loader.classList.remove('not-view');
 
-    const response = await fetch(adress);
-    const dataList = await response.json();
+    try {
+      const response = await fetch(adress);
 
-    if (dataList) {
-      itemsList = [];
-      dataList.forEach(item => {
-        item.important ? itemsList.unshift(item) : itemsList.push(item);
-      })
-      loader.classList.add('not-view');
+      if (!response.ok) {
+        throw new Error("Ошибка сервера");
+      }
+
+      const dataList = await response.json();
+
+      if (dataList) {
+        itemsList = [];
+        dataList.forEach(item => {
+          item.important ? itemsList.unshift(item) : itemsList.push(item);
+        });
+      };
 
       renderItems();
-    } else {
-      itemsList = [];
+    } catch (error) {
+      console.error('Не удалось загрузить список');
+    } finally {
+      loader.classList.add('not-view');
     }
   };
 
@@ -77,56 +84,87 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   async function setItem(adress) {
-    if (editId !== null) {
-      if (data.value.trim() === '') {
-        data.focus();
-        return;
-      }
-      await changeItemText(currentAdress, editId, data.value);
-      save.textContent = 'Сохранить';
-      editId = null;
-    } else {
-      if (data.value === '') {
-        data.focus();
+    try {
+      if (editId !== null) {
+        if (data.value.trim() === '') {
+          data.focus();
+          return;
+        }
+        await changeItemText(currentAdress, editId, data.value);
+        save.textContent = 'Сохранить';
+        editId = null;
       } else {
-        const item = data.value;
+        if (data.value === '') {
+          data.focus();
+        } else {
+          const item = data.value;
 
-        await fetch(adress, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ text: item })
-        });
+          const response = await fetch(adress, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ text: item })
+          });
 
-        getList(adress);
+          if (!response.ok) {
+            throw new Error("Не удалось отправить данные на сервер");
+
+          }
+          await getList(adress);
+        }
       }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function deleteItem(adress, taskId) {
+    try {
+      const response = await fetch(`${adress}/${taskId}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) throw new Error('Не удалось удалить задачу');
+
+      await getList(adress);
+    } catch (error) {
+      console.error('Ошибка при удалении:', error);
+      alert('Произошла ошибка при удалении задачи. Проверьте соединение.');
     }
   };
 
-  async function deleteItem(adress, taskId) {
-    await fetch(`${adress}/${taskId}`, {
-      method: 'DELETE'
-    });
-    getList(adress);
-  };
-
   async function madeImportant(adress, taskId, status) {
-    await fetch(`${adress}/${taskId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ important: status })
-    });
+    try {
+      const response = await fetch(`${adress}/${taskId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ important: status })
+      });
 
-    getList(adress);
+      if (!response.ok) throw new Error('Не удалось обновить статус');
+
+      await getList(adress);
+    } catch (error) {
+      console.error('Ошибка изменения важности:', error);
+      // Здесь можно не выводить alert, чтобы не надоедать пользователю, 
+      // но в консоли мы увидим, что пошло не так.
+    }
   };
 
   async function changeItemText(adress, taskId, itemText) {
-    await fetch(`${adress}/${taskId}`, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text: itemText })
-    });
+    try {
+      const response = await fetch(`${adress}/${taskId}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ text: itemText })
+      });
 
-    getList(adress);
+      if (!response.ok) throw new Error('Не удалось изменить текст');
+
+      await getList(adress);
+    } catch (error) {
+      console.error('Ошибка при редактировании:', error);
+      alert('Не удалось сохранить изменения.');
+    }
   }
 
   document.addEventListener('click', (e) => {

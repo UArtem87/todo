@@ -113,6 +113,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const id = parent.getAttribute('id');
 
     if (el.classList.contains('del')) {
+      parent.classList.add('delete');
       deleteItem(currentAdress, id);
     }
 

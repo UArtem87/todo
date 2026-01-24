@@ -154,24 +154,25 @@ body {
 }
 
 .items__block {
-  position: relative;
+  display: flex;
+  align-items: center;
+  width: 300px;
+  background-color: #fff;
+  border-radius: 10px;
 }
 
 .items__block--title {
   display: block;
   white-space: nowrap;
   text-overflow: ellipsis;
+  flex-grow: 1;
   max-height: 32px;
   transition: 1s ease-in-out;
   overflow: hidden;
   box-sizing: border-box;
-  background-color: #fff;
-  width: 300px;
   line-height: 32px;
   font-size: 20px;
-  border-radius: 10px;
-  padding-left: 15px;
-  padding-right: 75px;
+  padding-left: 5px;
   cursor: default;
 }
 
@@ -185,12 +186,22 @@ body {
   white-space: normal;
 }
 
+.change {
+  padding-inline: 5px;
+  transform: rotate(135deg);
+  font-size: 20px;
+  user-select: none;
+  color: #1900ff;
+}
+
+.change:hover {
+  transform: rotate(90deg);
+}
+
 .important {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-55%);
-  right: 45px;
-  font-size: 30px;
+  display: block;
+  font-size: 24px;
+  margin-right: 10px;
   cursor: pointer;
   user-select: none;
 }
@@ -201,9 +212,8 @@ body {
 }
 
 .del {
-  position: absolute;
-  top: 3px;
-  right: 10px;
+  margin-right: 8px;
+  padding-inline: 12px;
   background-image: url(../images/bin-icon.png);
   background-size: 25px 25px;
   background-repeat: no-repeat;

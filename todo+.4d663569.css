@@ -147,7 +147,11 @@ body {
 }
 
 .items__block {
-  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  align-items: center;
+  width: 300px;
+  display: flex;
 }
 
 .items__block--title {
@@ -155,12 +159,9 @@ body {
   text-overflow: ellipsis;
   box-sizing: border-box;
   cursor: default;
-  background-color: #fff;
-  border-radius: 10px;
-  width: 300px;
+  flex-grow: 1;
   max-height: 32px;
-  padding-left: 15px;
-  padding-right: 75px;
+  padding-left: 5px;
   font-size: 20px;
   line-height: 32px;
   transition: all 1s ease-in-out;
@@ -178,14 +179,24 @@ body {
   max-height: 500px;
 }
 
+.change {
+  user-select: none;
+  color: #1900ff;
+  padding-inline: 5px;
+  font-size: 20px;
+  transform: rotate(135deg);
+}
+
+.change:hover {
+  transform: rotate(90deg);
+}
+
 .important {
   cursor: pointer;
   user-select: none;
-  font-size: 30px;
-  position: absolute;
-  top: 50%;
-  right: 45px;
-  transform: translateY(-55%);
+  margin-right: 10px;
+  font-size: 24px;
+  display: block;
 }
 
 .important.active {
@@ -204,9 +215,8 @@ body {
   border-radius: 50%;
   width: 25px;
   height: 25px;
-  position: absolute;
-  top: 3px;
-  right: 10px;
+  margin-right: 8px;
+  padding-inline: 12px;
 }
 
 .del:hover {

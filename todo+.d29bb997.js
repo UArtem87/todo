@@ -718,6 +718,7 @@ const TASKSADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/tasks';
 const PURCHASESADRESS = 'https://696f53afa06046ce618642cd.mockapi.io/purchases';
 window.addEventListener('DOMContentLoaded', ()=>{
     let itemsList = [];
+    let editId = null;
     let currentAdress = PURCHASESADRESS;
     const header = document.querySelector('.header');
     const container = document.querySelector('.container');
@@ -757,14 +758,25 @@ window.addEventListener('DOMContentLoaded', ()=>{
             if (item.important) important.classList.add('active');
             const del = document.createElement('span');
             del.classList.add('del');
-            itemBlock.append(itemsBlockTitle, important, del);
+            const change = document.createElement('span');
+            change.classList.add('change');
+            change.innerHTML = '&#9999';
+            itemBlock.append(change, itemsBlockTitle, important, del);
             items.append(itemBlock);
         });
         data.value = '';
         items.classList.remove('faded');
     }
     async function setItem(adress) {
-        if (data.value === '') data.focus();
+        if (editId !== null) {
+            if (data.value.trim() === '') {
+                data.focus();
+                return;
+            }
+            await changeItemText(currentAdress, editId, data.value);
+            save.textContent = "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C";
+            editId = null;
+        } else if (data.value === '') data.focus();
         else {
             const item = data.value;
             await fetch(adress, {
@@ -797,6 +809,18 @@ window.addEventListener('DOMContentLoaded', ()=>{
         });
         getList(adress);
     }
+    async function changeItemText(adress, taskId, itemText) {
+        await fetch(`${adress}/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: itemText
+            })
+        });
+        getList(adress);
+    }
     document.addEventListener('click', (e)=>{
         const el = e.target;
         const parent = el.closest('.items__block');
@@ -813,12 +837,21 @@ window.addEventListener('DOMContentLoaded', ()=>{
             madeImportant(currentAdress, id, status);
         }
         if (el.classList.contains('items__block--title')) el.classList.toggle('expanded');
+        if (el.classList.contains('change')) {
+            editId = id;
+            data.value = itemsList.find((item)=>item.id === editId).text;
+            save.textContent = "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C";
+            data.focus();
+        }
     });
     save.onclick = ()=>setItem(currentAdress);
     data.onkeydown = (e)=>{
         if (e.key === 'Enter') setItem(currentAdress);
     };
     header.addEventListener('click', (e)=>{
+        editId = null;
+        save.textContent = "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C";
+        data.value = '';
         const isTasks = e.target.classList.contains('tasks');
         const isPurchases = e.target.classList.contains('purchases');
         if (!isTasks && !isPurchases) return;

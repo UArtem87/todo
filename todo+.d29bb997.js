@@ -728,19 +728,24 @@ window.addEventListener('DOMContentLoaded', ()=>{
     const save = document.querySelector('.data__btn');
     const items = document.querySelector('.items');
     async function getList(adress) {
-        if (adress === TASKSADRESS) title.textContent = "\u041D\u0430\u0434\u043E \u0441\u0434\u0435\u043B\u0430\u0442\u044C:";
-        else title.textContent = "\u041D\u0430\u0434\u043E \u043A\u0443\u043F\u0438\u0442\u044C:";
+        title.textContent = adress === TASKSADRESS ? "\u041D\u0430\u0434\u043E \u0441\u0434\u0435\u043B\u0430\u0442\u044C:" : "\u041D\u0430\u0434\u043E \u043A\u0443\u043F\u0438\u0442\u044C:";
         loader.classList.remove('not-view');
-        const response = await fetch(adress);
-        const dataList = await response.json();
-        if (dataList) {
-            itemsList = [];
-            dataList.forEach((item)=>{
-                item.important ? itemsList.unshift(item) : itemsList.push(item);
-            });
-            loader.classList.add('not-view');
+        try {
+            const response = await fetch(adress);
+            if (!response.ok) throw new Error("\u041E\u0448\u0438\u0431\u043A\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0430");
+            const dataList = await response.json();
+            if (dataList) {
+                itemsList = [];
+                dataList.forEach((item)=>{
+                    item.important ? itemsList.unshift(item) : itemsList.push(item);
+                });
+            }
             renderItems();
-        } else itemsList = [];
+        } catch (error) {
+            console.error("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A");
+        } finally{
+            loader.classList.add('not-view');
+        }
     }
     function renderItems() {
         items.innerHTML = '';
@@ -768,58 +773,82 @@ window.addEventListener('DOMContentLoaded', ()=>{
         items.classList.remove('faded');
     }
     async function setItem(adress) {
-        if (editId !== null) {
-            if (data.value.trim() === '') {
-                data.focus();
-                return;
+        try {
+            if (editId !== null) {
+                if (data.value.trim() === '') {
+                    data.focus();
+                    return;
+                }
+                await changeItemText(currentAdress, editId, data.value);
+                save.textContent = "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C";
+                editId = null;
+            } else if (data.value === '') data.focus();
+            else {
+                const item = data.value;
+                const response = await fetch(adress, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: item
+                    })
+                });
+                if (!response.ok) throw new Error("'\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440'");
+                await getList(adress);
             }
-            await changeItemText(currentAdress, editId, data.value);
-            save.textContent = "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C";
-            editId = null;
-        } else if (data.value === '') data.focus();
-        else {
-            const item = data.value;
-            await fetch(adress, {
-                method: 'POST',
+        } catch (error) {
+            console.error("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440");
+        }
+    }
+    async function deleteItem(adress, taskId) {
+        try {
+            const response = await fetch(`${adress}/${taskId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0437\u0430\u0434\u0430\u0447\u0443");
+            await getList(adress);
+        } catch (error) {
+            console.error("\u041E\u0448\u0438\u0431\u043A\u0430 \u043F\u0440\u0438 \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u0438:", error);
+            alert("\u041F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430 \u043F\u0440\u0438 \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u0438 \u0437\u0430\u0434\u0430\u0447\u0438. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u0435.");
+        }
+    }
+    async function madeImportant(adress, taskId, status) {
+        try {
+            const response = await fetch(`${adress}/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    important: status
+                })
+            });
+            if (!response.ok) throw new Error("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0441\u0442\u0430\u0442\u0443\u0441");
+            await getList(adress);
+        } catch (error) {
+            console.error("\u041E\u0448\u0438\u0431\u043A\u0430 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0432\u0430\u0436\u043D\u043E\u0441\u0442\u0438:", error);
+        // Здесь можно не выводить alert, чтобы не надоедать пользователю, 
+        // но в консоли мы увидим, что пошло не так.
+        }
+    }
+    async function changeItemText(adress, taskId, itemText) {
+        try {
+            const response = await fetch(`${adress}/${taskId}`, {
+                method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: item
+                    text: itemText
                 })
             });
-            getList(adress);
+            if (!response.ok) throw new Error("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0438\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0442\u0435\u043A\u0441\u0442");
+            await getList(adress);
+        } catch (error) {
+            console.error("\u041E\u0448\u0438\u0431\u043A\u0430 \u043F\u0440\u0438 \u0440\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438:", error);
+            alert("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F.");
         }
-    }
-    async function deleteItem(adress, taskId) {
-        await fetch(`${adress}/${taskId}`, {
-            method: 'DELETE'
-        });
-        getList(adress);
-    }
-    async function madeImportant(adress, taskId, status) {
-        await fetch(`${adress}/${taskId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                important: status
-            })
-        });
-        getList(adress);
-    }
-    async function changeItemText(adress, taskId, itemText) {
-        await fetch(`${adress}/${taskId}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                text: itemText
-            })
-        });
-        getList(adress);
     }
     document.addEventListener('click', (e)=>{
         const el = e.target;
